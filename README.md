@@ -1,98 +1,206 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Animal API - NestJS + TypeORM + PostgreSQL + Bruno
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API RESTful desarrollada con [NestJS](https://nestjs.com/), [TypeORM](https://typeorm.io/) y [PostgreSQL (PostGIS)](https://postgis.net/), con soporte completo para migraciones, validación de DTOs, Docker Compose y colección de pruebas en [Bruno](https://www.usebruno.com/).
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 📋 Entidad `Animal`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+| Campo | Tipo | Restricciones / Descripción |
+| :--- | :--- | :--- |
+| `id` | `number` | PK autoincremental / autogenerado |
+| `nombre` | `string` | Nombre del animal (Requerido) |
+| `especie` | `string` | Especie científica/común (ej. `"Canis lupus"`, Requerido) |
+| `raza` | `string` | Raza si aplica (Opcional/Nullable) |
+| `edad` | `number` | Edad en años (Entero no negativo) |
+| `peso` | `number` | Peso en kg (Decimal positivo) |
 
-## Project setup
+---
 
+## 🚀 Requisitos Previos
+
+- [Node.js](https://nodejs.org/) (v18 o superior)
+- [Docker](https://www.docker.com/) y Docker Compose
+- [Bruno](https://www.usebruno.com/) para ejecutar la colección de peticiones
+
+---
+
+## ⚙️ Instalación y Configuración
+
+### 1. Clonar el repositorio
 ```bash
-$ npm install
+git clone <URL_DEL_REPOSITORIO>
+cd Animal_api
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+### 2. Variables de Entorno
+Crea un archivo `.env` en la raíz (puedes tomar como base `.env.example`):
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=animal_db
 ```
 
-## Run tests
-
+### 3. Instalar Dependencias
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### 4. Levantar la Base de Datos con Docker
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker compose up -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 5. Ejecutar Migraciones de TypeORM
+```bash
+npm run migration:run
+```
 
-## Resources
+Si deseas generar nuevas migraciones tras modificar la entidad:
+```bash
+npm run migration:generate -- src/db/migrations/NombreDeLaMigracion
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### 6. Iniciar el Servidor de Desarrollo
+```bash
+npm run start:dev
+```
+La API estará disponible en: `http://localhost:3000`
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## 📡 Endpoints de la API (`/animal`)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 1. Crear un Animal
+- **Método**: `POST`
+- **URL**: `http://localhost:3000/animal`
+- **Body** (`application/json`):
+```json
+{
+  "nombre": "Lobo Gris",
+  "especie": "Canis lupus",
+  "raza": "Lobo euroasiático",
+  "edad": 4,
+  "peso": 42.5
+}
+```
+- **Respuesta (201 Created)**:
+```json
+{
+  "id": 1,
+  "nombre": "Lobo Gris",
+  "especie": "Canis lupus",
+  "raza": "Lobo euroasiático",
+  "edad": 4,
+  "peso": 42.5
+}
+```
 
-## Stay in touch
+### 2. Obtener Todos los Animales
+- **Método**: `GET`
+- **URL**: `http://localhost:3000/animal`
+- **Respuesta (200 OK)**:
+```json
+[
+  {
+    "id": 1,
+    "nombre": "Lobo Gris",
+    "especie": "Canis lupus",
+    "raza": "Lobo euroasiático",
+    "edad": 4,
+    "peso": 42.5
+  }
+]
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 3. Obtener un Animal por ID
+- **Método**: `GET`
+- **URL**: `http://localhost:3000/animal/:id` (ej. `/animal/1`)
+- **Respuesta (200 OK)**:
+```json
+{
+  "id": 1,
+  "nombre": "Lobo Gris",
+  "especie": "Canis lupus",
+  "raza": "Lobo euroasiático",
+  "edad": 4,
+  "peso": 42.5
+}
+```
 
-## License
+### 4. Actualizar un Animal
+- **Método**: `PATCH`
+- **URL**: `http://localhost:3000/animal/:id` (ej. `/animal/1`)
+- **Body** (`application/json`):
+```json
+{
+  "edad": 5,
+  "peso": 45.0
+}
+```
+- **Respuesta (200 OK)**:
+```json
+{
+  "id": 1,
+  "nombre": "Lobo Gris",
+  "especie": "Canis lupus",
+  "raza": "Lobo euroasiático",
+  "edad": 5,
+  "peso": 45.0
+}
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### 5. Eliminar un Animal
+- **Método**: `DELETE`
+- **URL**: `http://localhost:3000/animal/:id` (ej. `/animal/1`)
+- **Respuesta (200 OK)**:
+```json
+{
+  "message": "Animal con ID 1 eliminado correctamente"
+}
+```
+
+---
+
+## 🧪 Colección Bruno
+
+La carpeta [`bruno_collection/`](./bruno_collection) incluye:
+- `bruno.json` (Manifiesto de la colección)
+- `environments/Local.bru` (`baseUrl: http://localhost:3000`)
+- `1 - Create Animal.bru`
+- `2 - Get All Animals.bru`
+- `3 - Get Animal by ID.bru`
+- `4 - Update Animal.bru`
+- `5 - Delete Animal.bru`
+
+### Cómo usarla en Bruno:
+1. Abre **Bruno**.
+2. Haz clic en **Open Collection**.
+3. Selecciona la carpeta `bruno_collection` dentro de este proyecto.
+4. Selecciona el entorno **Local** en la esquina superior derecha.
+5. Ejecuta las peticiones en orden secuencial (1 al 5).
+
+---
+
+## 📦 Scripts Disponibles
+
+- `npm run start:dev` - Inicia la API en modo de desarrollo con recarga automática.
+- `npm run build` - Compila el proyecto TypeScript a la carpeta `dist`.
+- `npm run typeorm` - Ejecuta la CLI de TypeORM.
+- `npm run migration:generate -- <path>` - Genera una nueva migración detectando cambios en entidades.
+- `npm run migration:run` - Ejecuta las migraciones pendientes en la base de datos.
+- `npm run migration:revert` - Revierte la última migración aplicada.
+
+---
+
+## 🔗 Subir a GitHub
+
+Para vincular este repositorio local con tu repositorio remoto de GitHub:
+```bash
+git remote add origin https://github.com/<TU_USUARIO>/<TU_REPOSITORIO>.git
+git branch -M main
+git push -u origin main
+```
