@@ -1,0 +1,21 @@
+meta {
+  name: 1 - Create Animal
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/animal
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Lobo Gris",
+    "especie": "Canis lupus",
+    "raza": "Lobo euroasiático",
+    "edad": 4,
+    "peso": 42.5
+  }
+}
