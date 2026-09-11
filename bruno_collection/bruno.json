@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "Animal API",
+  "name": "Water Reports API",
   "type": "collection",
   "ignore": [
     "node_modules",

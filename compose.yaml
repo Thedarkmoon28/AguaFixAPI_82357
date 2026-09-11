@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgis/postgis:16-master
-    container_name: animal-api-db
+    container_name: water-reports-api-db
     ports:
       - 5432:5432
     environment:
@@ -13,7 +13,7 @@ services:
  
   redis:
     image: redis
-    container_name: animal-api-redis
+    container_name: water-reports-api-redis
     ports:
       - 6379:6379
     volumes:

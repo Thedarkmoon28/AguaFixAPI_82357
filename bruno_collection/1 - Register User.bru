@@ -1,0 +1,20 @@
+meta {
+  name: 1 - Register User
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Juan Pérez",
+    "email": "juan.perez@municipio.gob",
+    "password": "Password123!",
+    "isNotificationEnabled": true
+  }
+}
