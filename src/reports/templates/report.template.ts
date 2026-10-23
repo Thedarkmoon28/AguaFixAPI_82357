@@ -5,7 +5,29 @@ export interface ReportTemplateDto {
   reporterPhone: string;
 }
 
-export function generateReportTemplate(dto: ReportTemplateDto): string {
+export function generateReportTemplate(
+  dto: ReportTemplateDto,
+  photoUrl: string,
+): string {
+  const escape = (value: string) =>
+    value.replace(
+      /[&<>"']/g,
+      (c) =>
+        ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+        })[c]!,
+    );
+  dto = {
+    address: escape(dto.address),
+    description: escape(dto.description),
+    severity: escape(dto.severity),
+    reporterPhone: escape(dto.reporterPhone),
+  };
+  const safePhotoUrl = escape(photoUrl);
   const severityMap: Record<string, string> = {
     low: 'Baja',
     medium: 'Media',
@@ -47,6 +69,7 @@ export function generateReportTemplate(dto: ReportTemplateDto): string {
             <td>${dto.reporterPhone}</td>
           </tr>
         </table>
+        <img src="${safePhotoUrl}" alt="Foto de la fuga" style="max-width: 100%; height: auto; margin-top: 16px;">
       </td>
     </tr>
   </table>

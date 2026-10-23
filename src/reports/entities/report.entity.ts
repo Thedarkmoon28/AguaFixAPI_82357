@@ -25,6 +25,12 @@ export class Report {
   @Column({ name: 'is_resolved', type: 'boolean', default: false })
   isResolved: boolean;
 
+  @Column({ name: 'photo_url', type: 'text', nullable: true })
+  photoUrl: string | null;
+
+  @Column({ name: 'repair_photo_url', type: 'text', nullable: true })
+  repairPhotoUrl: string | null;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 }

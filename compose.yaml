@@ -1,24 +1,29 @@
 services:
-  postgres:
-    image: postgis/postgis:16-master
-    container_name: water-reports-api-db
+  api:
+    image: thedarkmoonx28/aguafix-api:latest
     ports:
-      - 5432:5432
+      - "3000:3000"
+    env_file: .env
     environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USERNAME}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      PORT: 3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["sh", "-c", "node node_modules/typeorm/cli.js -d dist/db/data-source.js migration:run && node dist/main"]
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:?Define DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:?Define DB_NAME}
     volumes:
       - postgres_data_db:/var/lib/postgresql/data
- 
-  redis:
-    image: redis
-    container_name: water-reports-api-redis
-    ports:
-      - 6379:6379
-    volumes:
-      - redis_data_db:/data
- 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 volumes:
   postgres_data_db:
-  redis_data_db:

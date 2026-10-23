@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ReportsService } from './reports.service';
 import { Report } from './entities/report.entity';
+import { StorageService } from '../storage/storage.service';
 import { EmailService } from '../email/email.service';
 
 describe('ReportsService', () => {
@@ -40,6 +41,14 @@ describe('ReportsService', () => {
       providers: [
         ReportsService,
         {
+          provide: StorageService,
+          useValue: {
+            uploadFile: jest
+              .fn()
+              .mockResolvedValue('https://example.com/reports/photo.png'),
+          },
+        },
+        {
           provide: getRepositoryToken(Report),
           useValue: mockReportRepository,
         },
@@ -66,9 +75,15 @@ describe('ReportsService', () => {
       reporterPhone: '809-555-1234',
     };
 
-    const result = await service.create(dto);
+    const result = await service.create(dto, {
+      buffer: Buffer.from('photo'),
+    } as Express.Multer.File);
 
-    expect(mockReportRepository.create).toHaveBeenCalledWith(dto);
+    expect(mockReportRepository.create).toHaveBeenCalledWith({
+      ...dto,
+      photoUrl: 'https://example.com/reports/photo.png',
+      repairPhotoUrl: null,
+    });
     expect(mockReportRepository.save).toHaveBeenCalled();
     expect(mockEmailService.sendEmail).toHaveBeenCalled();
     expect(result.id).toBe(1);

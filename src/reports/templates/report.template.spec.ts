@@ -9,13 +9,17 @@ describe('generateReportTemplate', () => {
       reporterPhone: '809-555-1234',
     };
 
-    const html = generateReportTemplate(dto);
+    const html = generateReportTemplate(
+      dto,
+      'https://example.com/reports/photo.png',
+    );
 
     expect(html).toContain('Calle 10 #123, Sector Centro');
     expect(html).toContain('Tubería rota en acera');
     expect(html).toContain('809-555-1234');
     expect(html).toContain('Alta');
     expect(html).toContain('<!DOCTYPE html>');
+    expect(html).toContain('<img src="https://example.com/reports/photo.png"');
     expect(html).toContain('Nuevo Reporte de Fuga de Agua');
   });
 
@@ -27,7 +31,10 @@ describe('generateReportTemplate', () => {
       reporterPhone: '809-555-9876',
     };
 
-    const html = generateReportTemplate(lowDto);
+    const html = generateReportTemplate(
+      lowDto,
+      'https://example.com/reports/photo.png',
+    );
     expect(html).toContain('Baja');
   });
 });

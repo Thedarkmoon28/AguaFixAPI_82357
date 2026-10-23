@@ -48,9 +48,25 @@ describe('ReportsController', () => {
       reporterPhone: '809-555-1234',
     };
 
-    const result = await controller.create(dto);
-    expect(service.create).toHaveBeenCalledWith(dto);
+    const photo = {
+      size: 10,
+      buffer: Buffer.from('photo'),
+      mimetype: 'image/png',
+    } as Express.Multer.File;
+    const result = await controller.create(dto, photo);
+    expect(service.create).toHaveBeenCalledWith(dto, photo);
     expect(result).toEqual(mockReport);
+  });
+
+  it('rejects missing photo', async () => {
+    await expect(
+      controller.create({
+        address: 'A',
+        description: 'B',
+        severity: 'high',
+        reporterPhone: '1',
+      }),
+    ).rejects.toThrow('La foto de la fuga es obligatoria');
   });
 
   it('GET /reports should return an array of reports', async () => {

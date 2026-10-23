@@ -3,18 +3,15 @@ meta {
   type: http
   seq: 3
 }
-
 post {
   url: http://localhost:3000/reports
-  body: json
+  body: multipartForm
   auth: none
 }
-
-body:json {
-  {
-    "address": "Av. Principal esq. Calle 5ta, Sector Los Álamos",
-    "description": "Fuga considerable de agua potable brotando de la acera frente al #45",
-    "severity": "high",
-    "reporterPhone": "+18095551234"
-  }
+body:multipart-form {
+  address: Calle 1
+  description: Fuga en banqueta
+  severity: high
+  reporterPhone: 5551234567
+  photo: @file({{photoPath}})
 }
