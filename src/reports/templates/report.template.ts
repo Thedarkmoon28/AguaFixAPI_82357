@@ -69,6 +69,7 @@ export function generateReportTemplate(
             <td>${dto.reporterPhone}</td>
           </tr>
         </table>
+        <h3 style="color: #333; margin-top: 20px;">Fotografía de la fuga reportada</h3>
         <img src="${safePhotoUrl}" alt="Foto de la fuga" style="max-width: 100%; height: auto; margin-top: 16px;">
       </td>
     </tr>
