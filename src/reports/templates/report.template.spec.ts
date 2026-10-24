@@ -1,4 +1,5 @@
 import { generateReportTemplate } from './report.template';
+import { describe, it, expect, beforeEach, afterEach, beforeAll, afterAll, jest } from '@jest/globals';
 
 describe('generateReportTemplate', () => {
   it('should generate valid HTML containing the report details', () => {

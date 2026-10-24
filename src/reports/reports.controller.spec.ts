@@ -1,10 +1,12 @@
+/// <reference types="jest" />
+/// <reference types="multer" />
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReportsController } from './reports.controller';
 import { ReportsService } from './reports.service';
 
 describe('ReportsController', () => {
   let controller: ReportsController;
-  let service: ReportsService;
 
   const mockReport = {
     id: 1,
@@ -12,6 +14,8 @@ describe('ReportsController', () => {
     description: 'Fuga de agua',
     severity: 'high',
     reporterPhone: '809-555-1234',
+    photoUrl: 'https://example.com/reports/photo.png',
+    repairPhotoUrl: null,
     isResolved: false,
     createdAt: new Date(),
   };
@@ -22,6 +26,8 @@ describe('ReportsController', () => {
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ReportsController],
       providers: [
@@ -33,7 +39,6 @@ describe('ReportsController', () => {
     }).compile();
 
     controller = module.get<ReportsController>(ReportsController);
-    service = module.get<ReportsService>(ReportsService);
   });
 
   it('should be defined', () => {
@@ -53,25 +58,32 @@ describe('ReportsController', () => {
       buffer: Buffer.from('photo'),
       mimetype: 'image/png',
     } as Express.Multer.File;
+
     const result = await controller.create(dto, photo);
-    expect(service.create).toHaveBeenCalledWith(dto, photo);
+
+    expect(mockReportsService.create).toHaveBeenCalledWith(dto, photo);
     expect(result).toEqual(mockReport);
   });
 
   it('rejects missing photo', async () => {
-    await expect(
-      controller.create({
-        address: 'A',
-        description: 'B',
-        severity: 'high',
-        reporterPhone: '1',
-      }),
-    ).rejects.toThrow('La foto de la fuga es obligatoria');
+    const dto = {
+      address: 'Calle 1',
+      description: 'Fuga de agua',
+      severity: 'high',
+      reporterPhone: '5551234567',
+    };
+
+    await expect(controller.create(dto)).rejects.toThrow(
+      'La foto de la fuga es obligatoria',
+    );
+
+    expect(mockReportsService.create).not.toHaveBeenCalled();
   });
 
   it('GET /reports should return an array of reports', async () => {
     const result = await controller.findAll();
-    expect(service.findAll).toHaveBeenCalled();
+
+    expect(mockReportsService.findAll).toHaveBeenCalledTimes(1);
     expect(result).toEqual([mockReport]);
   });
 });
