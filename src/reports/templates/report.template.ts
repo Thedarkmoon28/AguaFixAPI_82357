@@ -46,7 +46,7 @@ export function generateReportTemplate(
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: auto; background-color: #fff; border: 1px solid #ddd; border-radius: 4px;">
     <tr>
       <td style="padding: 16px; background-color: #0d6efd; color: #fff;">
-        <h2 style="margin: 0; font-size: 18px;">Nuevo Reporte de Fuga de Agua</h2>
+        <h2 style="margin: 0; font-size: 18px;">Nuevo reporte ciudadano de fuga - AguaFix</h2>
       </td>
     </tr>
     <tr>
