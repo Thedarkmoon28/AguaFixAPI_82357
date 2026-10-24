@@ -20,7 +20,7 @@ describe('generateReportTemplate', () => {
     expect(html).toContain('Alta');
     expect(html).toContain('<!DOCTYPE html>');
     expect(html).toContain('<img src="https://example.com/reports/photo.png"');
-    expect(html).toContain('Nuevo Reporte de Fuga de Agua');
+    expect(html).toContain('Nuevo reporte ciudadano de fuga - AguaFix');
   });
 
   it('should handle medium and low severity correctly', () => {
